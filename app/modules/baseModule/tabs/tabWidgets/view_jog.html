@@ -1,0 +1,70 @@
+<div class="well well-with-label">
+
+    <span class="well-label"><abbr title="{{nls.JogTitle}}">{{nls.JogTitle}}</abbr></span>
+
+<div class="btn-group" role="group" aria-label="{{nls.JogAxesLabel}}" data-bind="foreach:linuxCNCServer.AxesNumbers">
+<button type="button" class="btn btn-default" data-bind="text: ($root.linuxCNCServer.axisNames)[$data], css:{ 'btn-primary': $data == $root.selected_axis(), 'btn-default': $data != $root.selected_axis()}, click: $root.selectAxis"></button>
+</div>
+
+<button class="btn btn-default" data-bind="event: { mousedown: $root.minus_pressed, touchstart: $root.minus_pressed, mouseup: $root.minus_released, touchend: $root.minus_released }">-</button>
+
+<button class="btn btn-default" data-bind="event: { mousedown: plus_pressed, touchstart: plus_pressed, mouseup: plus_released, touchend: plus_released }">+</button>
+
+<span class="dropdown">
+<span>
+    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-bind="text: step_label">Continuous</button>
+    <ul class="dropdown-menu" aria-label="dropdownMenu" data-bind="foreach:all_step_options">
+        <li><a class="dropdown-item" href="#" data-bind="text: $root.stepOptionLabel($data), click: $root.selectStep">Continuous</a></li>
+    </ul>
+    </span>
+</span>
+<br/>
+
+<label for="jog_with_mousewheel_cb"><h5>{{nls.JogWithMouseWheel}}:</h5></label>
+<span id="jog_with_mousewheel" class="switch" data-on="success" data-off="primary" data-bind="event: { 'switch-change': toggleMouseWheel }">
+<input id="jog_with_mousewheel_cb" type="checkbox"/></span>
+<br/>
+<br/>
+
+<!--
+    <table class="table table-condensed-no-border">
+        <tbody data-bind="foreach:linuxCNCServer.AxesNumbers">
+            <tr class="borderless-table">
+                <td class="width-axis-label ">
+                    <label data-bind="attr:{for: (($data).toString()+'droax') }, text: ($root.linuxCNCServer.axisNames)[$data]+':', click: $root.onDROFocus "
+                           class="label big-label span12 label-info" style="text-align: center;"></label>
+                </td>
+
+                <td class="">
+                    <input type="text" class="input span12 huge-input" style="text-align: right; font-weight:bold;"
+                           data-bind="event: {change: function(data,event){ $root.onDROValChange(data,event,$data)}, blur: function(data,event){ $root.onDROValChange(data,event,$data) } }, value: ( $root.linuxCNCServer.RmtDRO()[$data].toFixed($root.linuxCNCServer.DisplayPrecision()) ), attr:{id: (($data).toString()+'droax') } ">
+                </td>
+
+                <td class="width-button">
+                    <button class="btn btn-block xbtn-primary"
+                            data-bind="click: function(){$root.onZeroDRO($data)}, attr:{id: ('bzdro'+($data).toString())}">
+                        {{nls.Zero}}
+                    </button>
+                </td>
+
+                <td class="width-button">
+                    <button class="btn btn-block xbtn-primary"
+                            data-bind="click: function(){$root.onHome($data)}, attr:{id: ('bhdro'+($data).toString())}">
+                        <span class=""
+                              data-bind="visible: (!$root.linuxCNCServer.vars.homed.data()[$data]), css: {count: ! $root.linuxCNCServer.vars.homed.data()[$data] }"><i
+                                class="icon-warning-sign"></i></span>
+                        {{nls.Home}}
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <div class="btn-toolbar">
+        <button id="spindleRateBut" class="btn width-button-larger" style="text-align: center; " ><span data-bind="text: linuxCNCServer.vars.spindle_speed.data"></span> RPM</button>
+        <button class="btn xbtn-primary" data-bind="click: linuxCNCServer.homeAll">{{nls.HomeAll}}</button>
+    </div>
+-->
+
+</div>

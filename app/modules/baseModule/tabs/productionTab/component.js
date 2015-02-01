@@ -5,6 +5,7 @@ define(function(require) {
 
     var ViewModel = require('./viewmodel');
     var ViewModel_dro = require('../tabWidgets/viewmodel_dro');
+    var ViewModel_jog = require('../tabWidgets/viewmodel_jog');
     var ViewModel_file = require('../tabWidgets/viewmodel_file');
     var ViewModel_run = require('../tabWidgets/viewmodel_run');
     var ViewModel_spindle = require('../tabWidgets/viewmodel_spindle');
@@ -15,6 +16,7 @@ define(function(require) {
     var Component = function(moduleContext) {
 		var panel = null;
         var panel_dro = null;
+        var panel_jog = null;
         var panel_file = null;
         var panel_run = null;
         var panel_spindle = null;
@@ -23,6 +25,7 @@ define(function(require) {
         var panel_backplot = null;
         var vm = null;
         var vm_dro = null;
+        var vm_jog = null;
         var vm_file = null;
         var vm_run = null;
         var vm_spindle = null;
@@ -47,6 +50,13 @@ define(function(require) {
                     ko.applyBindings( vm_dro, panel_dro.getDomElement());
                 }
                 vm_dro.initialize(panel_dro);
+
+                if (!panel_jog) {
+                    vm_jog = new ViewModel_jog(moduleContext, privateContext);
+                    panel_jog = new Boiler.ViewTemplate(panel.getJQueryElement().find("#JOG_PANEL"), vm_jog.getTemplate(), vm_jog.getNls());
+                    ko.applyBindings( vm_jog, panel_jog.getDomElement());
+                }
+                vm_jog.initialize(panel_jog);
 
                 if (!panel_run) {
                     vm_run = new ViewModel_run(moduleContext, privateContext);

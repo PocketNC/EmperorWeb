@@ -6,6 +6,10 @@ define({
         "Zero": "Zero",
         "HomeAll": "Home All",
 
+        "JogTitle" : "Jog",
+        "JogAxesLabel" : "Axes",
+        "JogWithMouseWheel": "Jog With Mouse Wheel",
+
         "DROFullName" : "Digital Read Out",
 
         "BackplotTitle": "Backplot",

@@ -1,3 +1,34 @@
+.navbar-inverse .nav > li > a:focus,
+.navbar-inverse .nav > li > a:hover {
+  background-color: rgb(90,121,0);
+  color: #ffffff;
+}
+.navbar-inverse .nav .active > a,
+.navbar-inverse .nav .active > a:hover,
+.navbar-inverse .nav .active > a:focus {
+  color: #ffffff;
+  background-color: rgb(90,121,0);
+}
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
+.navbar-inverse .nav li.dropdown.active > .dropdown-toggle,
+.navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle {
+  background-color: rgb(90,121,0);
+  color: #ffffff;
+}
+.logo {
+height: 30px;
+}
+.navbar-fixed-bottom .navbar-inner {
+border-color: rgb(90,121,0);
+}
+.navbar-fixed-top .navbar-inner, .navbar-static-top .navbar-inner {
+border-color: rgb(90,121,0);
+}
+
+.navbar-inner .container-fluid {
+background-color: rgb(120,163,0);
+}
+
 .clearfix {
   *zoom: 1;
 }
@@ -364,7 +395,7 @@ a.badge:focus {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  background-color: #033c73;
+  background-color: rgb(120,163,0);
   display: block;
   float: left;
   top: 0px;
@@ -770,10 +801,10 @@ fieldset {
   background: #73a839;
 }
 .ui-slider-wrap .slider-inverse .ui-slider-handle {
-  border-color: #033c73;
+  border-color: rgb(120,163,0);
 }
 .ui-slider-wrap .slider-inverse .ui-slider-range {
-  background: #033c73;
+  background: rgb(120,163,0);
 }
 .ui-slider-wrap .slider-info .ui-slider-handle {
   border-color: #9760b3;

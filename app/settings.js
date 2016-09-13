@@ -11,7 +11,7 @@ define(['/app/linuxCNCInterface.js', '/app/core/helpers/utility.js'], function(l
 
     $.cookie.json = true;
 
-	settings.appName =  "Emperor";
+	settings.appName =  "PocketNC";
     settings.linuxCNCServer = linuxcnc;
     settings.globals = {
         nextUniqueElementID : 0

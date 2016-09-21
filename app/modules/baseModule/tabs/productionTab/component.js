@@ -8,7 +8,8 @@ define(function(require) {
     var ViewModel_file = require('../tabWidgets/viewmodel_file');
     var ViewModel_run = require('../tabWidgets/viewmodel_run');
     var ViewModel_spindle = require('../tabWidgets/viewmodel_spindle');
-    var ViewModel_coolant = require('../tabWidgets/viewmodel_coolant');
+//    var ViewModel_coolant = require('../tabWidgets/viewmodel_coolant');
+    var ViewModel_gcodes = require('../tabWidgets/viewmodel_gcodes');
     var ViewModel_backplot = require('../tabWidgets/viewmodel_backplot');
 
     var Component = function(moduleContext) {
@@ -18,6 +19,7 @@ define(function(require) {
         var panel_run = null;
         var panel_spindle = null;
         var panel_coolant = null;
+        var panel_gcodes = null;
         var panel_backplot = null;
         var vm = null;
         var vm_dro = null;
@@ -25,6 +27,7 @@ define(function(require) {
         var vm_run = null;
         var vm_spindle = null;
         var vm_coolant = null;
+        var vm_gcodes = null;
         var vm_backplot = null;
 
         var privateContext = new Boiler.Context();
@@ -59,12 +62,20 @@ define(function(require) {
                 }
                 vm_spindle.initialize(panel_spindle);
 
+/*
                 if (!panel_coolant) {
                     vm_coolant = new ViewModel_coolant(moduleContext, privateContext);
                     panel_coolant = new Boiler.ViewTemplate(panel.getJQueryElement().find("#COOLANT_PANEL"), vm_coolant.getTemplate(), vm_coolant.getNls());
                     ko.applyBindings( vm_coolant, panel_coolant.getDomElement());
                 }
                 vm_coolant.initialize(panel_coolant);
+*/
+                if (!panel_gcodes) {
+                    vm_gcodes = new ViewModel_gcodes(moduleContext, privateContext);
+                    panel_gcodes = new Boiler.ViewTemplate(panel.getJQueryElement().find("#GCODES_PANEL"), vm_gcodes.getTemplate(), vm_gcodes.getNls());
+                    ko.applyBindings( vm_gcodes, panel_gcodes.getDomElement());
+                }
+                vm_gcodes.initialize(panel_gcodes);
 
                 if (!panel_backplot) {
                     vm_backplot = new ViewModel_backplot(moduleContext, privateContext);

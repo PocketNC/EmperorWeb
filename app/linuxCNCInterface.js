@@ -210,6 +210,8 @@ define(function (require) {
     lcncsvr.vars.tool_in_spindle = { data: ko.observable(0), watched: true };
     lcncsvr.vars.homed = { data: ko.observableArray([0, 0, 0, 0, 0, 0, 0, 0, 0]), watched: true };
     lcncsvr.vars.gcodes = { data: ko.observableArray([]), watched: true };
+    lcncsvr.vars.mcodes = { data: ko.observableArray([]), watched: true };
+    lcncsvr.vars.settings = { data: ko.observableArray([]), watched: true };
     lcncsvr.vars.file = { data: ko.observable(""), watched: true };
     lcncsvr.vars.motion_line = { data: ko.observable(0), watched: true };
     lcncsvr.vars.optional_stop = { data: ko.observable(false), watched: true };
@@ -997,8 +999,9 @@ define(function (require) {
                         return;
                     }
 
-                    if (data.id == "LOGIN")
+                    if (data.id == "LOGIN") {
                         lcncsvr.server_logged_in(true);
+                    }
 
                     if (lcncsvr.server_logged_in())
                         lcncsvr.hbTimeout();

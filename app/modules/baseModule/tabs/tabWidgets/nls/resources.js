@@ -15,6 +15,7 @@ define({
 
         "SpindleTitle" : "Spindle",
         "CoolantTitle" : "Coolant",
+        "GCodesTitle" : "Active GCodes",
 
         "MCodesTitle": "Misc Controls",
         "Coolant" : "Coolant",

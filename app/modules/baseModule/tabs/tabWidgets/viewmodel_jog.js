@@ -8,21 +8,37 @@ define(function(require) {
         self.linuxCNCServer = moduleContext.getSettings().linuxCNCServer;
 
         self.mouseWheelOn = false;
+
+        self.mouseWheelBufferedEvents = 0;
+        self.timerSet = false;
         self.mouseWheelCallback = function(event) {
             var y = event.originalEvent.deltaY;
             if(y > 0) {
-                self.minus_pressed(0,event);
-                setTimeout(function() {
-                    self.minus_released(0,event);
-                }, 100);
+                self.mouseWheelBufferedEvents -= 1;
             } else if(y < 0) {
-                self.plus_pressed(0,event);
-                setTimeout(function() {
-                    self.plus_released(0,event);
+                self.mouseWheelBufferedEvents += 1;
+            }
+            if(!self.timerSet) {
+                self.mouseWheelTimer = setTimeout(function() {
+                    var step = self.step();
+                    if(step == 0) {
+                        var a = self.selected_axis();
+                        if(a > 2) { // if rotational
+                            step = 1;
+                        } else {
+                            step = .01;
+                        }
+                    }
+                    console.log(self.mouseWheelBufferedEvents*step);
+                    self.linuxCNCServer.jogIncr(self.selected_axis(), self.mouseWheelBufferedEvents*step);
+                    self.mouseWheelBufferedEvents = 0;
+                    self.timerSet = false;
                 }, 100);
+                self.timerSet = true;
             }
             event.preventDefault();
         };
+
         self.toggleMouseWheel = function() {
             if(self.mouseWheelOn) {
                 $("body").off('wheel', self.mouseWheelCallback);

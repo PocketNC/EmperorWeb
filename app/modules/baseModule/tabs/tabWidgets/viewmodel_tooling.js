@@ -7,7 +7,8 @@ define(function(require) {
 
 		var self = this;
         self.panel = null;
-        self.linuxCNCServer = moduleContext.getSettings().linuxCNCServer;
+        self.settings = moduleContext.getSettings();
+        self.linuxCNCServer = self.settings.linuxCNCServer;
 
         this.getTemplate = function()
         {
@@ -24,7 +25,7 @@ define(function(require) {
                 self.panel = Panel;
 
                 // var data = self.linuxCNCServer.vars.file_content.data().split('\n');
-                var data = [[0,0,0,0,0,0,0]];
+                var data = [[0,0,0, ""]];
 
                 self.toolListTable = $("#ToolListTable", self.panel.getJQueryElement());
                 self.toolListTable.handsontable({
@@ -32,9 +33,9 @@ define(function(require) {
                     stretchH: "all",
                     rowHeaders: true,
                     //colHeaders: ["Tool Number", "Z Offset", "X Offset", "Diameter", "Front Angle", "Back Angle", "Orientation"],
-                    colHeaders: ["Tool Number", "Z Offset", "Diameter"],
+                    colHeaders: [ "Z Offset", "Diameter", "Description"],
                     height: 255,
-                    startCols: 3,
+                    startCols: 4,
                     outsideClickDeselects: false,
 
                     afterChange: function(changes, source){
@@ -52,14 +53,19 @@ define(function(require) {
                                 var newVal = change[3];
 
                                 if (source == "edit")
-                                    if (col == 0)
+                                    if (col == 0) {
                                         ht.setDataAtCell(row,col, parseFloat(newVal.toString()).toFixed(0), "update" );
-                                    else
+                                    } else if(col < 2) {
                                         ht.setDataAtCell(row,col, parseFloat(newVal.toString()).toFixed(5), "update" );
+                                    } else {
+                                        ht.setDataAtCell(row,col, newVal.toString(), "update" );
+                                    }
                                 else
                                 {
                                     var rowDat = ht.getDataAtRow(row);
-                                    self.linuxCNCServer.setToolTableFull( rowDat[0],rowDat[1],0,rowDat[2],0,0,0);
+                                    self.linuxCNCServer.setToolTableFull( row+1,rowDat[0],0,rowDat[1],0,0,0);
+                                    self.settings.persist.ToolTableDescriptions()[row] = rowDat[2];
+                                    self.settings.persist.ToolTableDescriptions.valueHasMutated();
                                 }
                             } catch(ex){
                                 console.log(ex);
@@ -68,31 +74,32 @@ define(function(require) {
                     }
                 });
 
+                var ht = self.toolListTable.handsontable('getInstance');
+                if(self.linuxCNCServer.RmtManualInputAllowed() && self.linuxCNCServer.AllHomed()) {
+                    ht.updateSettings({
+                        readOnly: false, // make table cells read-only
+                        contextMenu: true, // disable context menu to change things
+                        disableVisualSelection: false, // prevent user from visually selecting
+                        manualColumnResize: false, // prevent dragging to resize columns
+                        manualRowResize: false, // prevent dragging to resize rows
+                        comments: false // prevent editing of comments
+                    });
+                } else {
+                    ht.updateSettings({
+                        readOnly: true, // make table cells read-only
+                        contextMenu: false, // disable context menu to change things
+                        disableVisualSelection: true, // prevent user from visually selecting
+                        manualColumnResize: false, // prevent dragging to resize columns
+                        manualRowResize: false, // prevent dragging to resize rows
+                        comments: false // prevent editing of comments
+                    });
+                }
+
                 // monitor file contents
+                self.settings.persist.ToolTableDescriptions.subscribe( self.updateDescriptions );
                 self.linuxCNCServer.vars.tool_table.data.subscribe( self.updateData );
-                self.linuxCNCServer.RmtManualInputAllowed.subscribe(function(newValue) {
-                    console.log(newValue);
-                    var ht = self.toolListTable.handsontable('getInstance');
-                    if(newValue) {
-                        ht.updateSettings({
-                            readOnly: false, // make table cells read-only
-                            contextMenu: true, // disable context menu to change things
-                            disableVisualSelection: false, // prevent user from visually selecting
-                            manualColumnResize: false, // prevent dragging to resize columns
-                            manualRowResize: false, // prevent dragging to resize rows
-                            comments: false // prevent editing of comments
-                        });
-                    } else {
-                        ht.updateSettings({
-                            readOnly: true, // make table cells read-only
-                            contextMenu: false, // disable context menu to change things
-                            disableVisualSelection: true, // prevent user from visually selecting
-                            manualColumnResize: false, // prevent dragging to resize columns
-                            manualRowResize: false, // prevent dragging to resize rows
-                            comments: false // prevent editing of comments
-                        });
-                    }
-                });
+                self.linuxCNCServer.RmtManualInputAllowed.subscribe(self.updateEditable);
+                self.linuxCNCServer.AllHomed.subscribe(self.updateEditable);
             }
 
             setTimeout( function() {
@@ -101,17 +108,46 @@ define(function(require) {
 
 		};
 
+        this.updateEditable = function() { 
+            var ht = self.toolListTable.handsontable('getInstance');
+            if(self.linuxCNCServer.RmtManualInputAllowed() && self.linuxCNCServer.AllHomed()) {
+                ht.updateSettings({
+                    readOnly: false, // make table cells read-only
+                    contextMenu: true, // disable context menu to change things
+                    disableVisualSelection: false, // prevent user from visually selecting
+                    manualColumnResize: false, // prevent dragging to resize columns
+                    manualRowResize: false, // prevent dragging to resize rows
+                    comments: false // prevent editing of comments
+                });
+            } else {
+                ht.updateSettings({
+                    readOnly: true, // make table cells read-only
+                    contextMenu: false, // disable context menu to change things
+                    disableVisualSelection: true, // prevent user from visually selecting
+                    manualColumnResize: false, // prevent dragging to resize columns
+                    manualRowResize: false, // prevent dragging to resize rows
+                    comments: false // prevent editing of comments
+                });
+            }
+        }
+
         this.updateData = function( newfilecontent )
         {
             var ht = self.toolListTable.handsontable('getInstance');
 
+            var desc = self.settings.persist.ToolTableDescriptions();
+
             var dat = [];
-            newfilecontent.forEach( function(d,idx){ dat.push( [ d[0].toFixed(0), d[3].toFixed(5), d[10].toFixed(5)] ); } );
+            newfilecontent.forEach( function(d,idx){ 
+                if(idx > 0) {
+                    dat.push( [ d[3].toFixed(5), d[10].toFixed(5), desc[idx-1] || "" ] ); 
+                }
+            });
             ht.loadData(dat);
 
             var rh = [];
             var rc = ht.countRows();
-            for (idx = 0; idx < rc; idx++)
+            for (idx = 1; idx <= rc; idx++)
                 rh.push(idx.toString());
             ht.updateSettings({rowHeaders: rh});
 

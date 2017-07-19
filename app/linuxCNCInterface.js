@@ -219,7 +219,7 @@ define(function (require) {
     lcncsvr.vars.spindlerate = { data: ko.observable(1), watched: true };
     lcncsvr.vars.feedrate = { data: ko.observable(1), watched: true };
     lcncsvr.vars.ls = { data: ko.observableArray([]), watched: true };
-    lcncsvr.vars.tool_table = {data: ko.observableArray([]), watched: true, indexed:true, max_index:55 };
+    lcncsvr.vars.tool_table = {data: ko.observableArray([]), watched: true, indexed:true, max_index:54 };
 
     lcncsvr.settings = ko.observable({});
 
@@ -240,6 +240,21 @@ define(function (require) {
     });
 
     // calculated variables
+    lcncsvr.AllHomed = ko.computed(function() {
+        var homed = lcncsvr.vars.homed.data();
+
+        if(lcncsvr.AxesNumbers) {
+            var axes = lcncsvr.AxesNumbers();
+            for(var i = 0; i < axes.length; i++) {
+                if(!homed[axes[i]]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
+    });
     lcncsvr.estop_inverse = ko.computed(function () {
         return !lcncsvr.vars.estop.data();
     });
@@ -1004,7 +1019,7 @@ define(function (require) {
                 try {
                     var data = JSON.parse(msg.data);
 
-//                    console.debug(data);
+//                    console.log(data);
 
                     if (data.code != "?OK") {
                         console.debug("WEBSOCKET: ERROR code returned " + msg.data);
@@ -1029,10 +1044,11 @@ define(function (require) {
                     if (lcncsvr.vars.hasOwnProperty(curID[0])) {
                         if (lcncsvr.vars[curID[0]].indexed)
                         {
-                            if (lcncsvr.vars[curID[0]].convert_to_json)
+                            if (lcncsvr.vars[curID[0]].convert_to_json) {
                                 lcncsvr.vars[curID[0]].data()[curID[1]] = JSON.parse(data.data);
-                            else
+                            } else {
                                 lcncsvr.vars[curID[0]].data()[curID[1]] = data.data;
+                            }
                             lcncsvr.vars[curID[0]].data.valueHasMutated();
                         } else {
                             if (lcncsvr.vars[curID[0]].convert_to_json)

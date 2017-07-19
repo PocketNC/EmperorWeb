@@ -3,7 +3,7 @@
         <span class="well-label"><span>{{nls.ToolingTitle}}</span></span>
 
         <div id="TOOLING_CONTENT">
-            <span data-bind="text: linuxCNCServer.RmtManualInputAllowed() ? '' : 'Power on the motors to be able to edit the tool table.'"></span>
+            <span data-bind="text: linuxCNCServer.RmtManualInputAllowed() && linuxCNCServer.AllHomed() ? '' : 'Power on motors and home all axes to be able to edit the tool table.'"></span>
             <div id="ToolListTable"></div>
         </div>
 

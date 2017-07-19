@@ -69,6 +69,8 @@ define(['/app/linuxCNCInterface.js', '/app/core/helpers/utility.js'], function(l
     settings.addPersistentSetting("JogStep2", 0.01,true );
     settings.addPersistentSetting("JogStep3", 0.1,true );
 
+    settings.addPersistentSetting("ToolTableDescriptions", [], true);
+
     // these settings need to be pushed to the linuxCNCServer
     settings.persist.DisplayUnitsPerMM.subscribe(function(newval){ settings.linuxCNCServer.DisplayUnitsPerMM(newval); });
     settings.persist.ChangeDisplayUnitsToProgramUnits.subscribe(function(newval){ settings.linuxCNCServer.ChangeDisplayUnitsToProgramUnits(newval)});

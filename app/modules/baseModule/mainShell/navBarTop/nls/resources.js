@@ -10,9 +10,9 @@ define({
     	"help": "Help",
     	"config": "Conf.",
 
-        "estop":"RESET",
+        "estop":"Shutdown",
         "power":"Power",
-        "abort":"Abort"
+        "abort":"Stop"
     }
 //    "sv" : true
 });

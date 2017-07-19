@@ -9,9 +9,9 @@ define(function(require) {
     var ViewModel_file = require('../tabWidgets/viewmodel_file');
     var ViewModel_run = require('../tabWidgets/viewmodel_run');
     var ViewModel_spindle = require('../tabWidgets/viewmodel_spindle');
-//    var ViewModel_coolant = require('../tabWidgets/viewmodel_coolant');
+    var ViewModel_fileOpen = require('../tabWidgets/viewmodel_fileOpen');
     var ViewModel_gcodes = require('../tabWidgets/viewmodel_gcodes');
-    var ViewModel_backplot = require('../tabWidgets/viewmodel_backplot');
+//    var ViewModel_backplot = require('../tabWidgets/viewmodel_backplot');
 
     var Component = function(moduleContext) {
 		var panel = null;
@@ -22,16 +22,18 @@ define(function(require) {
         var panel_spindle = null;
         var panel_coolant = null;
         var panel_gcodes = null;
-        var panel_backplot = null;
+//        var panel_backplot = null;
+        var panel_fileopen = null;
         var vm = null;
         var vm_dro = null;
         var vm_jog = null;
         var vm_file = null;
         var vm_run = null;
+        var vm_fileopen = null;
         var vm_spindle = null;
         var vm_coolant = null;
         var vm_gcodes = null;
-        var vm_backplot = null;
+//        var vm_backplot = null;
 
         var privateContext = new Boiler.Context();
 
@@ -50,6 +52,13 @@ define(function(require) {
                     ko.applyBindings( vm_dro, panel_dro.getDomElement());
                 }
                 vm_dro.initialize(panel_dro);
+
+                if (!panel_fileopen) {
+                    vm_fileopen = new ViewModel_fileOpen(moduleContext, privateContext);
+                    panel_fileopen = new Boiler.ViewTemplate(panel.getJQueryElement().find("#FILE_OPEN_PANEL"), vm_fileopen.getTemplate(), vm_fileopen.getNls());
+                    ko.applyBindings( vm_fileopen, panel_fileopen.getDomElement());
+                }
+                vm_fileopen.initialize(panel_fileopen);
 
                 if (!panel_jog) {
                     vm_jog = new ViewModel_jog(moduleContext, privateContext);
@@ -87,11 +96,14 @@ define(function(require) {
                 }
                 vm_gcodes.initialize(panel_gcodes);
 
+                /*
                 if (!panel_backplot) {
                     vm_backplot = new ViewModel_backplot(moduleContext, privateContext);
                     panel_backplot = new Boiler.ViewTemplate(panel.getJQueryElement().find("#BACKPLOT_PANEL"), vm_backplot.getTemplate(), vm_backplot.getNls());
                     ko.applyBindings( vm_backplot, panel_backplot.getDomElement());
                 }
+                vm_backplot.initialize(panel_backplot);
+                */
 
                 if (!panel_file) {
                     vm_file = new ViewModel_file(moduleContext, privateContext);
@@ -102,8 +114,7 @@ define(function(require) {
 
                 panel.show();
 
-                vm_backplot.initialize(panel_backplot);
-                moduleContext.notify("ActivatedTabNeedsResize",panel_backplot.getJQueryElement());
+                //moduleContext.notify("ActivatedTabNeedsResize",panel_backplot.getJQueryElement());
 
 			},
 

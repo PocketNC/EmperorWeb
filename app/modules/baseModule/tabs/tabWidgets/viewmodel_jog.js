@@ -49,7 +49,11 @@ define(function(require) {
         };
 
         self.linear_step_options     = [0, .1, .01, .001, .0001];
-        self.rotational_step_options = [0,  5,   1,   .5,   .05];
+        self.a_step_options = [0,  90, 5,   1,   .5,   .05];
+        self.b_step_options = [0,  360, 180, 90, 5,   1,   .5,   .05];
+        self.last_linear_step = 0;
+        self.last_a_step = 0;
+        self.last_b_step = 0;
         self.step_multiplier = self.linuxCNCServer.MachineUnitsToDisplayUnitsLinearScaleFactor();
         self.step = ko.observable(0);
         self.selectStep = function(step) {
@@ -60,6 +64,35 @@ define(function(require) {
         self.step_options = ko.observable(0);
         self.selected_axis = ko.observable(0);
         self.selectAxis = function(axis) {
+            var a = self.selected_axis();
+            var s = self.step();
+
+            if(a < 3) {
+                self.last_linear_step = s;
+            } else if(a == 3) {
+                self.last_a_step = s;
+            } else if(a == 4) {
+                self.last_b_step = s;
+            }
+
+
+            var step_options = self.linear_step_options;
+            if(axis == 3) {
+                step_options = self.a_step_options;
+            } else if(axis == 4) {
+                step_options = self.b_step_options;
+            }
+
+            var index = step_options.indexOf(s);
+            if(index == -1) {
+                if(axis < 3) {
+                    self.step(self.last_linear_step);
+                } else if(axis == 3) {
+                    self.step(self.last_a_step);
+                } else if(axis == 4) {
+                    self.step(self.last_b_step);
+                }
+            }
             self.selected_axis(axis);
         };
 
@@ -76,28 +109,18 @@ define(function(require) {
             var s = self.step();
             var a = self.selected_axis();
             if(a > 2) { // if rotational
-                var index = self.rotational_step_options.indexOf(s);
-                if(index == -1) {
-                    index = self.linear_step_options.indexOf(s);
-                    self.step(self.rotational_step_options[index]);
-                    s = self.step();
-                }
                 return (s == 0 ? 'Continuous' : 'Step ' + s);
             } else {
-                var index = self.linear_step_options.indexOf(s);
-                if(index == -1) {
-                    index = self.rotational_step_options.indexOf(s);
-                    self.step(self.linear_step_options[index]);
-                    s = self.step();
-                }
                 return (s == 0 ? 'Continuous' : 'Step ' + s*self.linuxCNCServer.MachineUnitsToDisplayUnitsLinearScaleFactor());
             }
         });
 
         self.all_step_options = ko.computed(function() {
             var a = self.selected_axis();
-            if(a > 2) {
-                return self.rotational_step_options;
+            if(a == 3) {
+                return self.a_step_options;
+            } else if(a == 4) {
+                return self.b_step_options;
             }
             return self.linear_step_options;
         });

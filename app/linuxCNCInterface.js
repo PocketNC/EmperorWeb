@@ -332,7 +332,10 @@ define(function (require) {
                     $.each( ordinals, function(idx,val){ obj[idx.toString()] = val; } );
                 lcncsvr.socket.send( JSON.stringify( obj ) );
             }
-        } catch (ex) { return false; }
+        } catch (ex) { 
+            console.log(ex);
+            return false; 
+        }
         return true;
     }
 
@@ -507,14 +510,16 @@ define(function (require) {
 
     lcncsvr.mdi = function( cmd )
     {
-        if ($.isEmptyObject(cmd))
+        if ($.isEmptyObject(cmd)) {
             return;
-        if (!lcncsvr.setRmtMode(lcncsvr.TASK_MODE_MDI))
+        }
+        if (!lcncsvr.setRmtMode(lcncsvr.TASK_MODE_MDI)) {
             return;
-        if (!lcncsvr.RmtManualInputAllowed())
+        }
+        if (!lcncsvr.RmtManualInputAllowed()) {
             return;
-        lcncsvr.sendCommand("mdi","mdi",[cmd]);
-        return;
+        }
+        return lcncsvr.sendCommand("mdi","mdi",[cmd]);
     }
 
     lcncsvr.prepare_for_mdi = function()
@@ -829,8 +834,14 @@ define(function (require) {
     lcncsvr.setToolTableFull = function( toolnum, zofs, xofs, diam, front, back, orient )
     {
         try {
-            lcncsvr.mdi("G10 L1 P" + toolnum + " Z" + zofs + " X" + xofs + " R" + (parseFloat(diam)/2).toFixed(5) + " I" + front + " J" + back + " Q" + orient );
-        } catch (ex) {}
+            console.log(toolnum, zofs, xofs, diam, front, back, orient);
+            if(!lcncsvr.mdi("G10 L1 P" + toolnum + " Z" + zofs + " X" + xofs + " R" + (parseFloat(diam)/2).toFixed(5) + " I" + front + " J" + back + " Q" + orient )) {
+                console.log("failed to send set tool table mdi command");
+            }
+        } catch (ex) {
+            console.log(ex);
+        }
+
     }
 
     lcncsvr.setToolTableZ = function( zOffset )
@@ -975,6 +986,13 @@ define(function (require) {
 
         try {
             lcncsvr.socket = new WebSocket("ws://" + lcncsvr.server_address() + ":" + lcncsvr.server_port() + "/websocket/");
+            /*
+            var old_send = lcncsvr.socket.send;
+            lcncsvr.socket.send = function() {
+                console.log("sent message", arguments);
+                old_send.apply(lcncsvr.socket, arguments);
+            };
+            */
 
             lcncsvr.socket.onopen = function () {
                 lcncsvr.socket.send(JSON.stringify({"id": "LOGIN", "user": lcncsvr.server_username(), "password": lcncsvr.server_password()}));
@@ -1036,6 +1054,8 @@ define(function (require) {
 
         }
     }
+
+    window.lcncsvr = lcncsvr;
 
     return lcncsvr;
 

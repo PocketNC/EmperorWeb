@@ -8,10 +8,7 @@ define(function(require) {
     var Boiler = require('Boiler'), 
         NavBarTopComponent = require('./mainShell/navBarTop/component'),
         NavBarBottomComponent = require('./mainShell/navBarBottom/component'),
-        OverviewTab = require('./tabs/overviewTab/component'),
         ProductionTab = require('./tabs/productionTab/component'),
-        FileTab = require('./tabs/fileTab/component'),
-        WorkSetupTab = require('./tabs/workSetupTab/component'),
         ToolingTab = require('./tabs/toolingTab/component'),
         ConfigTab = require('./tabs/configTab/component');
 
@@ -31,19 +28,13 @@ define(function(require) {
             controller.start();
 
             var controller = new Boiler.UrlController($("#main-content"));
-            var myOverviewTab = new OverviewTab(context);
-            var myFileTab = new FileTab(context);
-            var myWorkSetupTab = new WorkSetupTab(context);
             var myToolingTab = new ToolingTab(context);
             var myProductionTab = new ProductionTab(context);
             var myConfigTab = new ConfigTab(context);
             controller.addRoutes({
-                "/" : myOverviewTab,      // DEFAULT landing page
-                "1" : myFileTab,
-                "2" : myWorkSetupTab,
-                "3" : myToolingTab,
-                "4" : myProductionTab,
-                "5" : myConfigTab
+                "/" : myProductionTab,      // DEFAULT landing page
+                "1" : myToolingTab,
+                "2" : myConfigTab
             });
             controller.start();
 

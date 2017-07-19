@@ -8,7 +8,7 @@ define(function(require) {
 		var self = this;
         self.linuxCNCServer = moduleContext.getSettings().linuxCNCServer;
 
-        self.currentTabNum = ko.observable(0);
+        self.currentTabNum = ko.observable(parseInt(document.location.hash.substr(1)) || 0);
         self.activeTab0 = ko.computed( function(){ return self.currentTabNum() == 0 } );
         self.activeTab1 = ko.computed( function(){ return self.currentTabNum() == 1 } );
         self.activeTab2 = ko.computed( function(){ return self.currentTabNum() == 2 } );

@@ -31,9 +31,10 @@ define(function(require) {
 
                     stretchH: "all",
                     rowHeaders: true,
-                    colHeaders: ["ID", "Z Offset", "X Offset", "Diameter", "Front Angle", "Back Angle", "Orientation"],
+                    //colHeaders: ["Tool Number", "Z Offset", "X Offset", "Diameter", "Front Angle", "Back Angle", "Orientation"],
+                    colHeaders: ["Tool Number", "Z Offset", "Diameter"],
                     height: 255,
-                    startCols: 7,
+                    startCols: 3,
                     outsideClickDeselects: false,
 
                     afterChange: function(changes, source){
@@ -58,7 +59,7 @@ define(function(require) {
                                 else
                                 {
                                     var rowDat = ht.getDataAtRow(row);
-                                    self.linuxCNCServer.setToolTableFull( rowDat[0],rowDat[1],rowDat[2],rowDat[3],rowDat[4],rowDat[5],rowDat[6] );
+                                    self.linuxCNCServer.setToolTableFull( rowDat[0],rowDat[1],0,rowDat[2],0,0,0);
                                 }
                             } catch(ex){
                                 console.log(ex);
@@ -69,6 +70,29 @@ define(function(require) {
 
                 // monitor file contents
                 self.linuxCNCServer.vars.tool_table.data.subscribe( self.updateData );
+                self.linuxCNCServer.RmtManualInputAllowed.subscribe(function(newValue) {
+                    console.log(newValue);
+                    var ht = self.toolListTable.handsontable('getInstance');
+                    if(newValue) {
+                        ht.updateSettings({
+                            readOnly: false, // make table cells read-only
+                            contextMenu: true, // disable context menu to change things
+                            disableVisualSelection: false, // prevent user from visually selecting
+                            manualColumnResize: false, // prevent dragging to resize columns
+                            manualRowResize: false, // prevent dragging to resize rows
+                            comments: false // prevent editing of comments
+                        });
+                    } else {
+                        ht.updateSettings({
+                            readOnly: true, // make table cells read-only
+                            contextMenu: false, // disable context menu to change things
+                            disableVisualSelection: true, // prevent user from visually selecting
+                            manualColumnResize: false, // prevent dragging to resize columns
+                            manualRowResize: false, // prevent dragging to resize rows
+                            comments: false // prevent editing of comments
+                        });
+                    }
+                });
             }
 
             setTimeout( function() {
@@ -82,7 +106,7 @@ define(function(require) {
             var ht = self.toolListTable.handsontable('getInstance');
 
             var dat = [];
-            newfilecontent.forEach( function(d,idx){ dat.push( [ d[0].toFixed(0), d[3].toFixed(5), d[1].toFixed(5), d[10].toFixed(5), d[11].toFixed(5), d[12].toFixed(5), d[13].toFixed(5) ] ); } );
+            newfilecontent.forEach( function(d,idx){ dat.push( [ d[0].toFixed(0), d[3].toFixed(5), d[10].toFixed(5)] ); } );
             ht.loadData(dat);
 
             var rh = [];

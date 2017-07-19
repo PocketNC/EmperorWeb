@@ -15,12 +15,12 @@
                            data-bind="event: {change: function(data,event){ $root.onDROValChange(data,event,$data)}, blur: function(data,event){ $root.onDROValChange(data,event,$data) } }, value: ( $root.linuxCNCServer.RmtDRO()[$data].toFixed($root.linuxCNCServer.DisplayPrecision()) ), attr:{id: (($data).toString()+'droax') } ">
                 </td>
 
-                <td class="width-button">
+<!--                <td class="width-button">
                     <button class="btn btn-block xbtn-primary"
                             data-bind="click: function(){$root.onZeroDRO($data)}, attr:{id: ('bzdro'+($data).toString())}">
                         {{nls.Zero}}
                     </button>
-                </td>
+                </td>-->
 
                 <td class="width-button">
                     <!--Homing Button-->

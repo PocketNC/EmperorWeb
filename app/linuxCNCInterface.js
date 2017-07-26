@@ -320,6 +320,10 @@ define(function (require) {
 
     lcncsvr.filename_short = ko.computed( function() {
         var str = lcncsvr.vars.file.data();
+
+        var parts = str.split('/');
+        str = parts[parts.length-1];
+
         if (str.length > 32)
             return "..." + str.substr( str.length - 29 );
         return str;
@@ -593,6 +597,11 @@ define(function (require) {
         else
             lcncsvr.sendCommand("set_spindle_override","set_spindle_override",["0"]);
         return;
+    }
+
+    lcncsvr.stripPath = function(filepath) {
+        var parts = filepath.split('/');
+        return parts[parts.length-1];
     }
 
     lcncsvr.openFile = function( filename )

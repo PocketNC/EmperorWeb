@@ -63,7 +63,7 @@ define(function(require) {
                                 else
                                 {
                                     var rowDat = ht.getDataAtRow(row);
-                                    self.linuxCNCServer.setToolTableFull( row+1,rowDat[0],0,rowDat[1],0,0,0);
+                                    self.linuxCNCServer.setToolTableFull( row+1,self.linuxCNCServer.DisplayUnitsToMachineUnits(rowDat[0]),0,self.linuxCNCServer.DisplayUnitsToMachineUnits(rowDat[1]),0,0,0);
                                     self.settings.persist.ToolTableDescriptions()[row] = rowDat[2];
                                     self.settings.persist.ToolTableDescriptions.valueHasMutated();
                                 }
@@ -140,7 +140,7 @@ define(function(require) {
             var dat = [];
             newfilecontent.forEach( function(d,idx){ 
                 if(idx > 0) {
-                    dat.push( [ d[3].toFixed(5), d[10].toFixed(5), desc[idx-1] || "" ] ); 
+                    dat.push( [ self.linuxCNCServer.MachineUnitsToDisplayUnitsLinear(d[3]).toFixed(5), self.linuxCNCServer.MachineUnitsToDisplayUnitsLinear(d[10]).toFixed(5), desc[idx-1] || "" ] ); 
                 }
             });
             ht.loadData(dat);

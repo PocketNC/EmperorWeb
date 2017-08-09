@@ -43,11 +43,20 @@ define(function(require) {
                 try  {
                 if (parentContext.getSettings().linuxCNCServer.vars.error.data().text.length > 0)
                 {
+                    var t = parentContext.getSettings().linuxCNCServer.vars.error.data().text;
+
+                    t = t.replace("joint 0", "X Axis");
+                    t = t.replace("joint 1", "Y Axis");
+                    t = t.replace("joint 2", "Z Axis");
+                    t = t.replace("joint 3", "A Axis");
+                    t = t.replace("joint 4", "B Axis");
+
                     $.pnotify({
                         type: "error",
                         title: "Controller Error",
-                        text: parentContext.getSettings().linuxCNCServer.vars.error.data().text
+                        text: t
                     });
+                    console.error(parentContext.getSettings().linuxCNCServer.vars.error.data());
                     parentContext.getSettings().linuxCNCServer.clearLastError();
                 }
                 } catch(ex) {}

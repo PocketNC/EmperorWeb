@@ -19,6 +19,16 @@ define(function(require) {
             return nls;
         }
 
+        this.deleteFile = function(file) {
+            console.log('confirmed delete', file);
+            self.linuxCNCServer.deleteFile(file);
+            if(self.linuxCNCServer.filename_nopath() === file) {
+                self.linuxCNCServer.vars.file.data("");
+                self.linuxCNCServer.vars.backplot_async.data("");
+                self.linuxCNCServer.vars.file_content.data("");
+            }
+        }
+
 
         this.readFile = function(reader)
         {
@@ -27,7 +37,6 @@ define(function(require) {
 
         this.testFileSelect = function( evt )
         {
-            console.log(evt);
             var files = evt.target.files; // FileList object
             var reader = new FileReader();
             var f = files[0];

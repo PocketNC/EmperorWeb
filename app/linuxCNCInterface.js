@@ -227,7 +227,7 @@ define(function (require) {
     lcncsvr.vars.backplot_async = { data: ko.observable(""), watched: false, convert_to_json: true, local:true };
     lcncsvr.vars.file.data.subscribe( function(newval){ lcncsvr.socket.send(JSON.stringify({"id": "backplot_async", "command": "get", "name": "backplot_async"})); });
     lcncsvr.vars.file_content = { data: ko.observable(""), watched: false, local:true };
-    lcncsvr.vars.file.data.subscribe( function(newval){ lcncsvr.socket.send(JSON.stringify({"id": "file_content", "command": "get", "name": "file_content"})); });
+    lcncsvr.vars.file.data.subscribe( function(newval){ if(newval) lcncsvr.socket.send(JSON.stringify({"id": "file_content", "command": "get", "name": "file_content"})); });
 
     lcncsvr.server_logged_in.subscribe( function(newval) {
         if (!newval)
@@ -917,6 +917,12 @@ define(function (require) {
             x = 1;
         else
             lcncsvr.vars.backplot_async.data.valueHasMutated();
+    }
+
+    lcncsvr.deleteFile = function(filename) {
+        lcncsvr.setRmtMode(lcncsvr.TASK_MODE_MDI);
+        lcncsvr.setRmtMode(lcncsvr.TASK_MODE_AUTO);
+        lcncsvr.sendCommand("program_delete","program_delete",[filename]);
     }
 
     lcncsvr.uploadGCode = function(filename, data) {

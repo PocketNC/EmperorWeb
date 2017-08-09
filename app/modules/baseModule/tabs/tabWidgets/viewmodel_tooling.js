@@ -54,7 +54,7 @@ define(function(require) {
 
                                 if (source == "edit")
                                     if (col == 0) {
-                                        ht.setDataAtCell(row,col, parseFloat(newVal.toString()).toFixed(0), "update" );
+                                        ht.setDataAtCell(row,col, parseFloat(newVal.toString()).toFixed(5), "update" );
                                     } else if(col < 2) {
                                         ht.setDataAtCell(row,col, parseFloat(newVal.toString()).toFixed(5), "update" );
                                     } else {
@@ -96,7 +96,6 @@ define(function(require) {
                 }
 
                 // monitor file contents
-                self.settings.persist.ToolTableDescriptions.subscribe( self.updateDescriptions );
                 self.linuxCNCServer.vars.tool_table.data.subscribe( self.updateData );
                 self.linuxCNCServer.RmtManualInputAllowed.subscribe(self.updateEditable);
                 self.linuxCNCServer.AllHomed.subscribe(self.updateEditable);

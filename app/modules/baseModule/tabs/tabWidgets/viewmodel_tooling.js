@@ -23,6 +23,20 @@ define(function(require) {
             if (_.isNull( self.panel ))
             {
                 self.panel = Panel;
+                var actionRenderer = function(instance, td, row, col, prop, value, cellProperties) {
+                    var b = document.createElement("button");
+                    b.className = "btn btn-default";
+                    b.style.width = "85%";
+                    b.innerHTML = "Measure Tool " + (row+1);
+
+                    td.innerHTML = "";
+                    td.appendChild(b);
+
+                    b.onclick = function() {
+                        console.log("here");
+                        self.linuxCNCServer.loadTool(row+1);
+                    };
+                }
 
                 // var data = self.linuxCNCServer.vars.file_content.data().split('\n');
                 var data = [[0,0,0, ""]];
@@ -33,10 +47,14 @@ define(function(require) {
                     stretchH: "all",
                     rowHeaders: true,
                     //colHeaders: ["Tool Number", "Z Offset", "X Offset", "Diameter", "Front Angle", "Back Angle", "Orientation"],
-                    colHeaders: [ "Z Offset", "Diameter", "Description"],
+                    colHeaders: [ "Z Offset", "Diameter", "Description", "" ],
                     height: 255,
                     startCols: 4,
                     outsideClickDeselects: false,
+                    columns: [ { data: 0 },
+                               { data: 1 },
+                               { data: 2 },
+                               { data: "action", renderer: actionRenderer } ],
 
                     afterChange: function(changes, source){
                         if (!_.isArray(changes))

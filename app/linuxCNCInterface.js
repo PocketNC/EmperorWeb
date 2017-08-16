@@ -855,6 +855,16 @@ define(function (require) {
         return lcncsvr.sendCommand("spindle_brake_set","brake",[val]);
     }
 
+    lcncsvr.loadTool = function(toolNum) {
+        try {
+            if(!lcncsvr.mdi("M654 T" + toolNum)) {
+                console.log("failed to send load tool command");
+            }
+        } catch(ex) {
+            console.log(ex);
+        }
+    }
+
     lcncsvr.setToolTableFull = function( toolnum, zofs, xofs, diam, front, back, orient )
     {
         try {

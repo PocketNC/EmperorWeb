@@ -20,7 +20,6 @@ define(function(require) {
         }
 
         this.deleteFile = function(file) {
-            console.log('confirmed delete', file);
             self.linuxCNCServer.deleteFile(file);
             if(self.linuxCNCServer.filename_nopath() === file) {
                 self.linuxCNCServer.vars.file.data("");
@@ -43,6 +42,9 @@ define(function(require) {
             reader.onload = (function(theFile) {
                 return function(e) {
                     self.linuxCNCServer.uploadGCode(theFile.name, e.target.result );
+                    self.linuxCNCServer.requestFileContent();
+
+                    $('#file_input').val(""); // clear file_input so same file can be reuploaded.
                 };
             })(f);
             reader.readAsText(f);

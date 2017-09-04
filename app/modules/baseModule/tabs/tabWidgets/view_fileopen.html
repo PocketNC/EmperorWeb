@@ -51,7 +51,7 @@
                             <div class="btn-group">
                                 <a id="file_list_dropdown" class="btn span12 dropdown-toggle text-center" role="button" data-toggle="dropdown" href="#"><i class="icon-file"></i> <span data-bind="text: linuxCNCServer.filename_short"></span></a>
                                 <ul class="dropdown-menu text-left" role="menu" aria-labelledby="file_list_dropdown" data-bind="foreach: linuxCNCServer.vars.ls">
-                                    <li class="file_hover"><a style="display: inline-block; width: 300px; height: 28px" tabindex="-1" href="#" data-bind="text: $root.linuxCNCServer.stripPath($data), click: function(d){console.log('load', d);$root.linuxCNCServer.openFile(d);}" ></a> <a style="margin: 5px; display: inline-block" class="btn btn-default" role="button" data-bind="click: function(d) { $('#fileAreYouSureFile').html($root.linuxCNCServer.stripPath(d)); console.log('delete', d) }" data-toggle="modal" data-target="#fileAreYouSureModal"><i class="icon-remove"></i></a></li>
+                                    <li class="file_hover"><a style="display: inline-block; width: 300px; height: 28px" tabindex="-1" href="#" data-bind="text: $root.linuxCNCServer.stripPath($data), click: function(d){$root.linuxCNCServer.openFile(d);}" ></a> <a style="margin: 5px; display: inline-block" class="btn btn-default" role="button" data-bind="click: function(d) { $('#fileAreYouSureFile').html($root.linuxCNCServer.stripPath(d)); }" data-toggle="modal" data-target="#fileAreYouSureModal"><i class="icon-remove"></i></a></li>
                                 </ul>
                             </div>
                         </div>

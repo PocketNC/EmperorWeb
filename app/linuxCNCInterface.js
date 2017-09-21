@@ -229,6 +229,9 @@ define(function (require) {
     lcncsvr.vars.file_content = { data: ko.observable(""), watched: false, local:true };
     lcncsvr.vars.file.data.subscribe( function(newval){ if(newval) lcncsvr.socket.send(JSON.stringify({"id": "file_content", "command": "get", "name": "file_content"})); });
 
+    lcncsvr.vars.versions = { data: ko.observableArray([]), watched: false }; 
+    lcncsvr.vars.current_version = { data: ko.observable(""), watched: false };
+
     lcncsvr.server_logged_in.subscribe( function(newval) {
         if (!newval)
         {

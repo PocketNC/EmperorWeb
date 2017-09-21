@@ -11,6 +11,7 @@
           <!--  <li><a id="OffsetsTab" href="#OffsetSettings" data-toggle="tab">{{nls.OffsetsSettingsTabTitle}}</a></li>-->
             <li><a id="JogTab" href="#JogSettings" data-toggle="tab">{{nls.JogSettingsTabTitle}}</a></li>
             <li><a id="ServerTab" href="#ServerSettings" data-toggle="tab">{{nls.ServerSettingsTabTitle}}</a></li>
+            <li><a id="VersionTab" href="#VersionSettings" data-toggle="tab">{{nls.VersionSettingsTabTitle}}</a></li>
         </ul>
 
         <div class="tab-content">
@@ -275,6 +276,31 @@
                         <label class="control-label" for="launchServerHelpBtn">Server Help Website</label>
                         <div class="controls">
                             <button class="btn" id="launchServerHelpBtn" data-bind="click: launchServerHelp" >{{nls.Launch}}</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <!--************* VERSION SETTINGS **************-->
+            <div class="tab-pane" id="VersionSettings">
+
+                <legend>{{nls.VersionLegend}}</legend>
+
+                <form class="form-horizontal">
+                    <div class="control-group">
+                        <label class="control-label" for="version">{{nls.VersionLabel}}</label>
+                        <div class="controls">
+                            <select data-bind="options: linuxCNCServer.vars.versions.data(), value: linuxCNCServer.vars.current_version.data()" class="" id="version" multiple="false">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button class="btn" data-bind="click: function() { alert('checking for updates! (but not really)') }">{{nls.CheckForUpdates}}</button>
+                            <button class="btn" data-bind="click: function() { alert('saved! (but not really)') }">{{nls.Save}}</button>
                         </div>
                     </div>
 

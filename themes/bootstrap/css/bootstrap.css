@@ -4060,7 +4060,7 @@ input[type="submit"].btn.btn-mini {
   border-radius: 6px 0 6px 6px;
 }
 .navbar-inverse .navbar-inner {
-  background-color: rgb(120,163,0);
+  background-color: #333333;
   background-image: -moz-linear-gradient(top, #04498c, #033c73);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#04498c), to(#033c73));
   background-image: -webkit-linear-gradient(top, #04498c, #033c73);
@@ -5511,7 +5511,7 @@ div.subnav-fixed {
 .btn-inverse {
   color: #ffffff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: rgb(120,163,0);
+  background-color: #333333;
   background-image: -moz-linear-gradient(top, #04498c, #033c73);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#04498c), to(#033c73));
   background-image: -webkit-linear-gradient(top, #04498c, #033c73);
